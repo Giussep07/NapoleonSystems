@@ -1,0 +1,164 @@
+package com.giussep.ricardo.napoleonsystems.model;
+
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "User")
+public class UserDto {
+
+    @PrimaryKey
+    private int id;
+
+    private String name;
+
+    @ColumnInfo(name = "user_name")
+    private String username;
+
+    private String email;
+
+    private String street;
+
+    private String suite;
+
+    private String city;
+
+    @ColumnInfo(name = "zip_code")
+    private String zipcode;
+
+    private String lat;
+
+    private String lng;
+
+    private String phone;
+
+    private String website;
+
+    @ColumnInfo(name = "company_name")
+    private String companyName;
+
+    @ColumnInfo(name = "catch_phrase")
+    private String catchPhrase;
+
+    private String bs;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getSuite() {
+        return suite;
+    }
+
+    public void setSuite(String suite) {
+        this.suite = suite;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getZipcode() {
+        return zipcode;
+    }
+
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public String getLng() {
+        return lng;
+    }
+
+    public void setLng(String lng) {
+        this.lng = lng;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getCatchPhrase() {
+        return catchPhrase;
+    }
+
+    public void setCatchPhrase(String catchPhrase) {
+        this.catchPhrase = catchPhrase;
+    }
+
+    public String getBs() {
+        return bs;
+    }
+
+    public void setBs(String bs) {
+        this.bs = bs;
+    }
+}
