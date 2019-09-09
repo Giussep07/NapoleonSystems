@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
+import io.reactivex.Observable;
 
 public class PostLocalDataSource implements PostDataSource {
 
@@ -46,5 +47,10 @@ public class PostLocalDataSource implements PostDataSource {
     @Override
     public Completable setPostLeido(Post post) {
         return postDao.updatePost(post);
+    }
+
+    @Override
+    public Maybe<List<Post>> getFavoritesPosts() {
+        return postDao.getFavoritesPosts();
     }
 }

@@ -31,4 +31,7 @@ public interface PostDao {
 
     @Query("SELECT * FROM Post")
     Maybe<List<Post>> getPosts();
+
+    @Query("SELECT * FROM Post WHERE favorite = 1")
+    Maybe<List<Post>> getFavoritesPosts();
 }

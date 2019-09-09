@@ -6,6 +6,7 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Maybe;
+import io.reactivex.Observable;
 
 public interface PostDataSource {
 
@@ -20,4 +21,6 @@ public interface PostDataSource {
     Maybe<List<Post>> getPosts();
 
     Completable setPostLeido(Post post);
+
+    Maybe<List<Post>> getFavoritesPosts();
 }

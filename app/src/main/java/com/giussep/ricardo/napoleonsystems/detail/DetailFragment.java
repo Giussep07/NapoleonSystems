@@ -1,6 +1,7 @@
 package com.giussep.ricardo.napoleonsystems.detail;
 
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -86,7 +87,23 @@ public class DetailFragment extends Fragment implements DetailContract.View {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, view);
+
+        if (getActivity() != null) {
+
+            if (getActivity().getActionBar() != null) {
+
+                ActionBar actionBar = getActivity().getActionBar();
+                actionBar.setTitle("Detalle Post");
+            }
+        }
+
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.dispose();
     }
 
     //region Implementation DetailContract.View

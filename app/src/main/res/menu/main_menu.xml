@@ -15,6 +15,13 @@
                 android:orderInCategory="100"
                 android:title="Eliminar todo"
                 app:showAsAction="ifRoom" />
+
+            <item
+                android:id="@+id/action_all_favorites"
+                android:icon="@drawable/ic_star_black_24"
+                android:orderInCategory="100"
+                android:title="All/Favorites"
+                app:showAsAction="ifRoom" />
         </menu>
 
     </item>

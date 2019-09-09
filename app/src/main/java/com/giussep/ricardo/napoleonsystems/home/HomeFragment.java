@@ -18,6 +18,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.giussep.ricardo.napoleonsystems.R;
 import com.giussep.ricardo.napoleonsystems.adapters.PostAdapter;
@@ -44,6 +45,8 @@ public class HomeFragment extends Fragment implements HomeContract.View, PostAda
     RecyclerView recyclerView;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
+    @BindView(R.id.swipeRefresh)
+    SwipeRefreshLayout swipeRefresh;
 
     private PostAdapter postAdapter;
     private View view;
@@ -68,6 +71,8 @@ public class HomeFragment extends Fragment implements HomeContract.View, PostAda
 
         ButterKnife.bind(this, view);
 
+        swipeRefresh.setOnRefreshListener(() -> presenter.getPosts());
+
         return view;
     }
 
@@ -91,8 +96,14 @@ public class HomeFragment extends Fragment implements HomeContract.View, PostAda
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_delete_all) {
-            postAdapter.deleteAllItems();
+
+        switch (item.getItemId()) {
+            case R.id.action_delete_all:
+                postAdapter.deleteAllItems();
+                break;
+            case R.id.action_all_favorites:
+                Navigation.findNavController(view).navigate(HomeFragmentDirections.homeFragmentToFavoritesFragment());
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -102,15 +113,19 @@ public class HomeFragment extends Fragment implements HomeContract.View, PostAda
     @Override
     public void showProgress() {
         progressBar.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
     }
 
     @Override
     public void hideProgress() {
         progressBar.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showData(List<Post> posts) {
+        swipeRefresh.setRefreshing(false);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -118,6 +133,8 @@ public class HomeFragment extends Fragment implements HomeContract.View, PostAda
         postAdapter = new PostAdapter(posts, this);
 
         recyclerView.setAdapter(postAdapter);
+
+        postAdapter.notifyDataSetChanged();
 
         SimpleItemTouchHelperCallback simpleItemTouchHelperCallback = new SimpleItemTouchHelperCallback(getContext(), 0, ItemTouchHelper.START, postAdapter);
 
@@ -128,7 +145,8 @@ public class HomeFragment extends Fragment implements HomeContract.View, PostAda
 
     @Override
     public void showError(String error) {
-
+        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+        swipeRefresh.setRefreshing(false);
     }
 
     @Override
@@ -148,7 +166,7 @@ public class HomeFragment extends Fragment implements HomeContract.View, PostAda
     @Override
     public void onPostClicked(Post post) {
 
-        if (post.getLeido() == 0){
+        if (post.getLeido() == 0) {
             post.setLeido(1);
             presenter.setPostLeido(post);
         }
