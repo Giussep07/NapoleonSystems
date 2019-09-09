@@ -24,6 +24,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
     private OnPostAdapter mListener;
 
     public interface OnPostAdapter {
+
+        void onPostClicked(Post post);
+
         void onPostDelete(Post post);
 
         void onAllDeleteComplete();
@@ -80,7 +83,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
             textViewTitle.setText(post.getTitle());
             textViewBody.setText(post.getBody());
 
-            if (!post.isLeido()) {
+            if (post.getLeido() == 0) {
                 viewIndicator.setVisibility(View.VISIBLE);
             } else {
                 viewIndicator.setVisibility(View.GONE);
@@ -93,7 +96,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
             }
 
             imageButtonFavorite.setOnClickListener(v -> {
-                if (post.getFavorite() == 0){
+                if (post.getFavorite() == 0) {
                     post.setFavorite(1);
                 } else {
                     post.setFavorite(0);
@@ -101,6 +104,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> im
 
                 mListener.onPostFavorite(post);
             });
+
+            itemView.setOnClickListener(v -> mListener.onPostClicked(post));
         }
     }
 

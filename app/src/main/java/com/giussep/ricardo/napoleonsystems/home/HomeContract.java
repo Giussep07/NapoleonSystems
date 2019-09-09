@@ -5,12 +5,16 @@ import com.giussep.ricardo.napoleonsystems.model.Post;
 import java.util.List;
 
 import io.reactivex.Completable;
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 
 public interface HomeContract {
 
     interface Model {
-        Observable<List<Post>> getPosts();
+
+        void setPresenter(HomeContract.Presenter presenter);
+
+        void getPosts();
 
         Completable insertPosts(List<Post> posts);
 
@@ -19,6 +23,8 @@ public interface HomeContract {
         Completable deleteAllPosts();
 
         Completable addPostToFavorite(Post post);
+
+        Completable setPostLeido(Post post);
     }
 
     interface View {
@@ -32,13 +38,17 @@ public interface HomeContract {
 
         void showAllPostsDeleted();
 
-        void postAddedToFavorite();
+        void postAddedToFavorite(Post post);
     }
 
     interface Presenter {
         void setView(HomeContract.View view);
 
         void getPosts();
+
+        void showData(List<Post> posts);
+
+        void showError(String error);
 
         void deletePost(Post post);
 
@@ -47,9 +57,14 @@ public interface HomeContract {
         void deleteAllPosts();
 
         void addPostToFavorite(Post post);
+
+        void setPostLeido(Post post);
     }
 
     interface Repository {
+
+        Maybe<List<Post>> getLocalPosts();
+
         Observable<List<Post>> getPosts();
 
         Completable insertPosts(List<Post> posts);
@@ -59,5 +74,7 @@ public interface HomeContract {
         Completable deleteAllPosts();
 
         Completable addPostToFavorite(Post post);
+
+        Completable setPostLeido(Post post);
     }
 }

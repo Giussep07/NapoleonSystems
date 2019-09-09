@@ -9,6 +9,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Completable;
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import retrofit2.Retrofit;
 
@@ -21,6 +22,11 @@ public class HomeRepository implements HomeContract.Repository {
     public HomeRepository(PostLocalDataSource postLocalDataSource, Retrofit retrofit) {
         this.postLocalDataSource = postLocalDataSource;
         this.retrofit = retrofit;
+    }
+
+    @Override
+    public Maybe<List<Post>> getLocalPosts() {
+        return postLocalDataSource.getPosts();
     }
 
     @Override
@@ -47,5 +53,10 @@ public class HomeRepository implements HomeContract.Repository {
     @Override
     public Completable addPostToFavorite(Post post) {
         return postLocalDataSource.addPostToFavorite(post);
+    }
+
+    @Override
+    public Completable setPostLeido(Post post) {
+        return postLocalDataSource.setPostLeido(post);
     }
 }

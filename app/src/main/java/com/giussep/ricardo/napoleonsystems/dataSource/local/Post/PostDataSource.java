@@ -5,6 +5,7 @@ import com.giussep.ricardo.napoleonsystems.model.Post;
 import java.util.List;
 
 import io.reactivex.Completable;
+import io.reactivex.Maybe;
 
 public interface PostDataSource {
 
@@ -15,4 +16,8 @@ public interface PostDataSource {
     Completable deleteAllPosts();
 
     Completable addPostToFavorite(Post post);
+
+    Maybe<List<Post>> getPosts();
+
+    Completable setPostLeido(Post post);
 }

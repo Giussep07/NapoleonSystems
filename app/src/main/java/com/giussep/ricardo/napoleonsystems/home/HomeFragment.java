@@ -1,6 +1,5 @@
 package com.giussep.ricardo.napoleonsystems.home;
 
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,11 +8,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,8 +42,11 @@ public class HomeFragment extends Fragment implements HomeContract.View, PostAda
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
     private PostAdapter postAdapter;
+    private View view;
 
     @Override
     public void onAttach(Context context) {
@@ -60,7 +64,7 @@ public class HomeFragment extends Fragment implements HomeContract.View, PostAda
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        view = inflater.inflate(R.layout.fragment_home, container, false);
 
         ButterKnife.bind(this, view);
 
@@ -97,23 +101,16 @@ public class HomeFragment extends Fragment implements HomeContract.View, PostAda
     //region Implementation HomeContract.View
     @Override
     public void showProgress() {
-
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgress() {
-
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void showData(List<Post> posts) {
-
-        //Obtenemos los 20 primeros posts
-        for (int i = 0; i < 20; i++) {
-            Post post = posts.get(i);
-
-            post.setLeido(false);
-        }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -140,13 +137,29 @@ public class HomeFragment extends Fragment implements HomeContract.View, PostAda
     }
 
     @Override
-    public void postAddedToFavorite() {
-        Toast.makeText(getContext(), "Post agregado como favorito", Toast.LENGTH_SHORT).show();
+    public void postAddedToFavorite(Post post) {
+        Toast.makeText(getContext(), String.format("Post %s como favorito", post.getFavorite() == 1 ? "agregado" : "eliminado"), Toast.LENGTH_SHORT).show();
     }
 
     //endregion
 
     //region Implementation PostAdapter.OnPostAdapter
+
+    @Override
+    public void onPostClicked(Post post) {
+
+        if (post.getLeido() == 0){
+            post.setLeido(1);
+            presenter.setPostLeido(post);
+        }
+
+        HomeFragmentDirections.ActionHomeFragmentToDetailFragment2 action = HomeFragmentDirections.actionHomeFragmentToDetailFragment2();
+
+        action.setUserId(post.getUserId());
+
+        Navigation.findNavController(view).navigate(action);
+
+    }
 
     @Override
     public void onPostDelete(Post post) {

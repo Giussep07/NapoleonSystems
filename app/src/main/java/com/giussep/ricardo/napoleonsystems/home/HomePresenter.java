@@ -2,10 +2,11 @@ package com.giussep.ricardo.napoleonsystems.home;
 
 import com.giussep.ricardo.napoleonsystems.model.Post;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -38,25 +39,24 @@ public class HomePresenter implements HomeContract.Presenter {
         if (view != null) {
 
             view.showProgress();
+            model.setPresenter(this);
+            model.getPosts();
+        }
+    }
 
-            disposable = new CompositeDisposable();
+    @Override
+    public void showData(List<Post> posts) {
+        if (view != null) {
+            view.hideProgress();
+            view.showData(posts);
+        }
+    }
 
-            disposable = model.getPosts()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(posts -> {
-                        view.showData(posts);
-                        view.hideProgress();
-
-                        disposable = model.insertPosts(posts)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(() -> System.out.println("Guardo registros"),
-                                        Throwable::printStackTrace);
-                    }, throwable -> {
-                        view.hideProgress();
-                        view.showError(throwable.getLocalizedMessage());
-                    });
+    @Override
+    public void showError(String error) {
+        if (view != null) {
+            view.hideProgress();
+            view.showError(error);
         }
     }
 
@@ -88,7 +88,18 @@ public class HomePresenter implements HomeContract.Presenter {
                 subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> view.postAddedToFavorite(),
+                        () -> view.postAddedToFavorite(post),
+                        Throwable::printStackTrace
+                );
+    }
+
+    @Override
+    public void setPostLeido(Post post) {
+        disposable = model.setPostLeido(post).
+                subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> System.out.println("Post leido"),
                         Throwable::printStackTrace
                 );
     }

@@ -24,8 +24,7 @@ public class Post {
     @SerializedName("body")
     private String body;
 
-    @Ignore
-    private boolean leido = true;
+    private int leido = 1;
 
     private int favorite;
 
@@ -61,11 +60,11 @@ public class Post {
         this.body = body;
     }
 
-    public boolean isLeido() {
+    public int getLeido() {
         return leido;
     }
 
-    public void setLeido(boolean leido) {
+    public void setLeido(int leido) {
         this.leido = leido;
     }
 

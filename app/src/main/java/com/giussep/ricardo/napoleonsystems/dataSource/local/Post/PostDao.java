@@ -12,6 +12,7 @@ import com.giussep.ricardo.napoleonsystems.model.Post;
 import java.util.List;
 
 import io.reactivex.Completable;
+import io.reactivex.Maybe;
 
 @Dao
 public interface PostDao {
@@ -26,5 +27,8 @@ public interface PostDao {
     Completable deleteAllPosts();
 
     @Update
-    Completable addPostToFavorite(Post post);
+    Completable updatePost(Post post);
+
+    @Query("SELECT * FROM Post")
+    Maybe<List<Post>> getPosts();
 }
